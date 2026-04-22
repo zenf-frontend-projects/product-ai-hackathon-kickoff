@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)file:///Users/zenfoo/Downloads/Product_AI_Hackathon_PO_Kickoff_v9.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product AI Hackathon — PO Kickoff</title>
+
+<!-- Instrument Serif (display) + Switzer (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================================
+   THEME TOKENS
+   ============================================================================ */
+:root {
+  --bg: #0d0f14;
+  --bg-elev: #1a1e29;
+  --bg-elev-2: #20252f;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --accent: #3ccc79;
+  --accent-dim: rgba(60, 204, 121, 0.14);
+  --text-primary: #eef0f3;
+  --text-secondary: #c4c8d0;
+  --text-muted: #8b909b;
+  --text-faint: #525863;
+
+  --font-display: 'Roboto Mono', ui-monospace, Menlo, monospace;
+  --font-body: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --title-size: clamp(2.5rem, 7vw, 6.5rem);
+  --h2-size: clamp(1.8rem, 4.5vw, 3.75rem);
+  --h3-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  --body-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  --small-size: clamp(0.8rem, 0.98vw, 0.95rem);
+  --micro-size: clamp(0.68rem, 0.82vw, 0.78rem);
+
+  --slide-padding-x: clamp(1.5rem, 5vw, 5rem);
+  --slide-padding-y: clamp(1rem, 3vw, 2.5rem);
+  --content-gap: clamp(0.75rem, 1.8vw, 1.5rem);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================================
+   VIEWPORT BASE
+   ============================================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: 1.65;
+  letter-spacing: 0.012em;
+  font-feature-settings: "ss01", "cv11";
+  font-weight: 450;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.slide {
+  width: 100vw;
+  height: 100vh; height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+  padding: var(--slide-padding-y) var(--slide-padding-x);
+}
+
+img, .image-container { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+
+@media (max-height: 700px) {
+  :root {
+    --slide-padding-y: clamp(0.75rem, 2.5vw, 1.5rem);
+    --title-size: clamp(2rem, 6vw, 4rem);
+    --h2-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+@media (max-height: 600px) {
+  :root {
+    --slide-padding-y: clamp(0.5rem, 2vw, 1rem);
+    --body-size: clamp(0.75rem, 1vw, 0.9rem);
+  }
+  .nav-dots { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ============================================================================
+   ATMOSPHERE — layered gradient mesh + subtle grid texture
+   Adds depth to every slide without changing the palette. Per-slide
+   accent positions rotate via :nth-child to create visual variety.
+   ============================================================================ */
+
+/* Primary atmospheric layer — soft accent glow + warm whisper.
+   Positioned in the top-left and bottom-right by default; overridden
+   per slide below. Drifts ~2% over 45s for subtle life. */
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: -5%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 65% 65% at 18% 20%, rgba(90, 230, 150, 0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 55% at 82% 85%, rgba(165, 140, 240, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 50%, rgba(40, 70, 95, 0.07) 0%, transparent 70%);
+  animation: atmosphere-drift 60s ease-in-out infinite;
+}
+
+/* Secondary layer — very subtle grid pattern, masked to fade toward edges
+   so it never looks like a strict tech-grid. 80px spacing, ~1.8% opacity. */
+.slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at center, black 20%, transparent 80%);
+          mask-image: radial-gradient(ellipse 70% 70% at center, black 20%, transparent 80%);
+}
+
+/* Ensure all slide content renders above the atmospheric layers. */
+.slide > * { position: relative; z-index: 1; }
+
+/* Per-slide atmospheric variation — rotate the accent glow position
+   so consecutive slides feel different without shouting about it. */
+.slide:nth-child(1)::before {
+  /* Title slide — stronger glow, more cinematic */
+  background:
+    radial-gradient(ellipse 70% 65% at 12% 22%, rgba(90, 230, 150, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 65% 60% at 88% 82%, rgba(165, 140, 240, 0.26) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(40, 70, 95, 0.09) 0%, transparent 70%);
+}
+.slide:nth-child(2)::before {
+  background:
+    radial-gradient(ellipse 65% 60% at 85% 15%, rgba(90, 230, 150, 0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 55% at 12% 88%, rgba(165, 140, 240, 0.17) 0%, transparent 65%);
+}
+.slide:nth-child(3)::before {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 115%, rgba(90, 230, 150, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 8% 12%, rgba(165, 140, 240, 0.16) 0%, transparent 65%);
+}
+.slide:nth-child(4)::before {
+  background:
+    radial-gradient(ellipse 60% 55% at 18% 88%, rgba(90, 230, 150, 0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 65% 55% at 88% 18%, rgba(165, 140, 240, 0.18) 0%, transparent 65%);
+}
+.slide:nth-child(5)::before {
+  background:
+    radial-gradient(ellipse 65% 60% at 88% 50%, rgba(90, 230, 150, 0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 55% at 12% 12%, rgba(165, 140, 240, 0.17) 0%, transparent 65%);
+}
+.slide:nth-child(6)::before {
+  /* Closing slide — echo the title slide's balance */
+  background:
+    radial-gradient(ellipse 70% 60% at 82% 22%, rgba(90, 230, 150, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 55% at 12% 88%, rgba(165, 140, 240, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(40, 70, 95, 0.08) 0%, transparent 70%);
+}
+
+/* Gentle drift — almost imperceptible translate on the mesh layer.
+   Reinforces "alive" without anything distracting. */
+@keyframes atmosphere-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(1.8%, -1.2%); }
+}
+
+/* ============================================================================
+   CHROME — top row only (brand left, slide index right)
+   ============================================================================ */
+.chrome-top {
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--micro-size);
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.chrome-top .brand-mark { display: flex; align-items: center; gap: 0.5rem; }
+.chrome-top .brand-mark::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.chrome-top .index { font-variant-numeric: tabular-nums; }
+.chrome-top .index .current { color: var(--text-primary); }
+
+.chrome-bottom {
+  grid-row: 3;
+  height: 0; /* reserved space, hidden by default */
+}
+
+/* ============================================================================
+   MAIN SLIDE BODY
+   ============================================================================ */
+.body {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  padding: clamp(1rem, 2.5vw, 2rem) 0;
+  gap: clamp(1.75rem, 4.5vh, 3.5rem);
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; color: var(--text-primary); }
+
+h1 {
+  font-size: var(--title-size);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: var(--h2-size);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  word-spacing: -0.12em;
+}
+h3 {
+  font-size: var(--h3-size);
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+h1 em, h2 em, h3 em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+p { color: var(--text-secondary); max-width: 62ch; }
+.lead { color: var(--text-primary); font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.5; max-width: 54ch; }
+
+/* Shared bullet list — used anywhere body content needs clean, scannable points.
+   Accent-green hairline prefix instead of a traditional bullet. */
+.bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.2vh, 1rem);
+  max-width: 52ch;
+}
+.bullets li {
+  color: var(--text-secondary);
+  font-size: var(--body-size);
+  line-height: 1.6;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: var(--micro-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.hairline {
+  width: clamp(28px, 3vw, 40px);
+  height: 1px;
+  background: var(--accent);
+  margin: clamp(1rem, 1.8vh, 1.5rem) 0;
+  border: none;
+}
+.hairline.full { width: 100%; background: var(--border); }
+
+/* ============================================================================
+   REVEALS
+   Slides animate in when they become visible in the viewport. Content
+   lifts 8px and fades in over 600ms, lightly staggered.
+   ============================================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.6s var(--ease);
+}
+.slide.visible .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.visible .reveal:nth-child(1) { transition-delay: 0.08s; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.18s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.28s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.38s; }
+.slide.visible .reveal:nth-child(5) { transition-delay: 0.48s; }
+.slide.visible .reveal:nth-child(6) { transition-delay: 0.58s; }
+
+.stagger > *:nth-child(1) { transition-delay: 0.1s; }
+.stagger > *:nth-child(2) { transition-delay: 0.2s; }
+.stagger > *:nth-child(3) { transition-delay: 0.3s; }
+.stagger > *:nth-child(4) { transition-delay: 0.4s; }
+.stagger > *:nth-child(5) { transition-delay: 0.5s; }
+.stagger > *:nth-child(6) { transition-delay: 0.6s; }
+.stagger > *:nth-child(7) { transition-delay: 0.7s; }
+.stagger > *:nth-child(8) { transition-delay: 0.8s; }
+
+/* Schedule rows cascade — each time/entry pair lifts in ~40ms after the last. */
+.schedule.schedule-stagger > .time,
+.schedule.schedule-stagger > .entry {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.slide.visible .schedule.schedule-stagger > .time,
+.slide.visible .schedule.schedule-stagger > .entry {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide.visible .schedule.schedule-stagger > *:nth-child(1)  { transition-delay: 0.18s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(2)  { transition-delay: 0.20s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(3)  { transition-delay: 0.24s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(4)  { transition-delay: 0.26s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(5)  { transition-delay: 0.30s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(6)  { transition-delay: 0.32s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(7)  { transition-delay: 0.36s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(8)  { transition-delay: 0.38s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(9)  { transition-delay: 0.42s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(10) { transition-delay: 0.44s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(11) { transition-delay: 0.48s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(12) { transition-delay: 0.50s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(13) { transition-delay: 0.54s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(14) { transition-delay: 0.56s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(15) { transition-delay: 0.60s; }
+.slide.visible .schedule.schedule-stagger > *:nth-child(16) { transition-delay: 0.62s; }
+
+/* Slide cross-fade — while a slide is mid-scroll (no `.visible`), its body
+   eases toward 0.35 opacity. The active slide stays fully lit. Creates a
+   subtle hand-off between slides without replacing the snap behaviour. */
+.slide .body,
+.slide .chrome-top {
+  transition: opacity 0.5s var(--ease);
+}
+.slide:not(.visible) .body,
+.slide:not(.visible) .chrome-top {
+  opacity: 0.35;
+}
+
+/* ============================================================================
+   SLIDE 1 — TITLE
+   ============================================================================ */
+.title-slide .body {
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(1rem, 2vh, 1.5rem);
+  max-width: 1200px;
+}
+.title-slide .kicker {
+  font-family: var(--font-body);
+  font-size: var(--small-size);
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.title-slide h1 {
+  font-size: clamp(3rem, 9vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+}
+.title-slide h1 em { font-style: italic; color: var(--accent); }
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.09em;
+  margin-left: 0.12em;
+  background: var(--accent);
+  vertical-align: baseline;
+  animation: cursor-blink 1.05s steps(1, end) infinite;
+}
+@keyframes cursor-blink {
+  0%, 49.9%  { opacity: 0.5; }
+  50%, 100%  { opacity: 0; }
+}
+.title-slide .meta {
+  display: flex;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: baseline;
+  margin-top: clamp(0.75rem, 1.5vh, 1.5rem);
+  color: var(--text-muted);
+  font-size: var(--small-size);
+  letter-spacing: 0.06em;
+}
+.title-slide .meta .item { display: flex; flex-direction: column; gap: 0.25rem; }
+.title-slide .meta .item .v {
+  color: var(--text-primary);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.title-slide .meta .item .k {
+  font-size: var(--micro-size);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-faint);
+}
+
+/* ============================================================================
+   SLIDE 2 — WHY (3 sections on one slide)
+   ============================================================================ */
+.section-intro h2 {
+  max-width: 28ch;
+  overflow-wrap: break-word;
+}
+.section-intro p { margin-top: clamp(0.75rem, 1.5vh, 1.2rem); }
+
+.tri-column {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3.5vw, 4rem);
+  padding-top: clamp(1.25rem, 2.5vh, 2rem);
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 900px) { .tri-column { grid-template-columns: 1fr; gap: clamp(1rem, 2vh, 1.5rem); } }
+
+.tri-column .col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.65rem, 1.3vh, 1.05rem);
+}
+.tri-column .col h3 {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  margin-bottom: clamp(0.35rem, 0.7vh, 0.65rem);
+}
+.tri-column .col p {
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ============================================================================
+   SLIDE 3 — HOW THE DAY RUNS (3 cards)
+   ============================================================================ */
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  margin-top: clamp(0.25rem, 0.5vh, 0.5rem);
+}
+@media (max-width: 900px) { .card-row { grid-template-columns: 1fr; } }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: clamp(1.25rem, 2.3vw, 1.9rem);
+  background: var(--bg-elev);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.65rem, 1.3vh, 1.1rem);
+}
+.card .cat {
+  font-family: var(--font-body);
+  font-size: var(--micro-size);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.card h3 { font-size: clamp(1.15rem, 1.75vw, 1.5rem); }
+.card p { font-size: var(--body-size); color: var(--text-secondary); line-height: 1.65; }
+
+.card-footnote {
+  padding-top: clamp(1rem, 2vh, 1.4rem);
+  border-top: 1px solid var(--border-soft);
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  max-width: 80ch;
+}
+.card-footnote strong { color: var(--text-secondary); font-weight: 500; }
+
+/* ============================================================================
+   SLIDE 4 — SCHEDULE (timeline)
+   ============================================================================ */
+.schedule {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(0.3rem, 0.6vh, 0.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: clamp(0.25rem, 0.5vh, 0.5rem);
+  padding-top: clamp(1.25rem, 2.5vh, 2rem);
+  border-top: 1px solid var(--border);
+}
+.schedule .time {
+  font-family: var(--font-body);
+  font-feature-settings: "tnum";
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  padding: clamp(0.7rem, 1.3vh, 1rem) 0;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.schedule .entry {
+  padding: clamp(0.55rem, 1vh, 0.8rem) 0;
+  border-bottom: 1px solid var(--border-soft);
+  display: grid;
+  grid-template-columns: minmax(19rem, 22rem) 1fr;
+  align-items: baseline;
+  gap: clamp(2.25rem, 4.5vw, 4rem);
+  min-height: clamp(2.5rem, 4.5vh, 3.25rem);
+}
+.schedule > .entry:last-child { border-bottom: none; }
+.schedule .entry .t {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.schedule .entry .t em { font-style: italic; color: var(--accent); }
+.schedule .entry .d {
+  color: var(--text-secondary);
+  font-size: var(--body-size);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.schedule .pin::before {
+  content: '';
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 0.6rem;
+  vertical-align: middle;
+}
+
+.schedule-note {
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ============================================================================
+   SLIDE 5 — WHAT YOU OWN (3 phases)
+   ============================================================================ */
+.phases {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-top: clamp(1.25rem, 2.5vh, 2rem);
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 900px) { .phases { grid-template-columns: 1fr; gap: clamp(1rem, 2vh, 1.5rem); } }
+
+.phase { display: flex; flex-direction: column; gap: clamp(0.5rem, 1vh, 0.8rem); }
+.phase .when {
+  font-family: var(--font-body);
+  font-size: var(--micro-size);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 500;
+}
+.phase h3 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); margin-bottom: clamp(0.25rem, 0.5vh, 0.5rem); }
+.phase ul { list-style: none; display: flex; flex-direction: column; gap: clamp(0.5rem, 1vh, 0.8rem); }
+.phase ul li {
+  color: var(--text-secondary);
+  font-size: var(--body-size);
+  line-height: 1.6;
+  padding-left: 1.15rem;
+  position: relative;
+}
+.phase ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ============================================================================
+   GLASS CONTAINERS — slides 2 (.tri-column > .col) and 5 (.phases > .phase)
+   ============================================================================ */
+.tri-column > .col,
+.phases > .phase {
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012));
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: clamp(1.35rem, 2.4vw, 1.9rem) clamp(1.4rem, 2.5vw, 2rem);
+  backdrop-filter: blur(10px) saturate(125%);
+  -webkit-backdrop-filter: blur(10px) saturate(125%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 1px 28px rgba(0,0,0,0.22);
+}
+
+.phase-warning {
+  padding: clamp(0.9rem, 1.7vw, 1.2rem) clamp(1.1rem, 2.2vw, 1.4rem);
+  border-left: 1px solid var(--accent);
+  background: var(--accent-dim);
+  font-size: var(--small-size);
+  color: var(--text-primary);
+  line-height: 1.65;
+  max-width: 90ch;
+}
+
+/* ============================================================================
+   SLIDE 6 — WHAT I OWN (6 items in a grid)
+   ============================================================================ */
+.owns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2rem) clamp(1.75rem, 3.5vw, 3.5rem);
+  margin-top: clamp(0.25rem, 0.5vh, 0.5rem);
+  padding-top: clamp(1.25rem, 2.5vh, 2rem);
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 900px) { .owns { grid-template-columns: 1fr 1fr; } }
+
+.own {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.3rem, 0.6vh, 0.5rem);
+  padding: clamp(0.75rem, 1.5vh, 1rem) 0;
+}
+.own .n {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+  color: var(--accent);
+}
+.own h3 { font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
+.own p { font-size: var(--small-size); color: var(--text-muted); line-height: 1.65; }
+
+/* ============================================================================
+   SLIDE 7 — NEXT STEPS (deadlines + questions)
+   ============================================================================ */
+.split-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: clamp(2.25rem, 5.5vw, 5.5rem);
+  padding-top: clamp(1.25rem, 2.5vh, 2rem);
+  border-top: 1px solid var(--border);
+}
+
+.split-2 .bullets li {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding-left: 1.25rem;
+}
+.split-2 .bullets li .opener {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-right: 0.35em;
+}
+@media (max-width: 900px) { .split-2 { grid-template-columns: 1fr; gap: clamp(1.5rem, 3vh, 2.5rem); } }
+
+.split-2 .col > .col-label {
+  font-family: var(--font-body);
+  font-size: var(--micro-size);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: clamp(0.75rem, 1.5vh, 1.25rem);
+}
+
+.deadlines { display: flex; flex-direction: column; }
+.deadlines .item {
+  display: grid;
+  grid-template-columns: clamp(7rem, 11vw, 9rem) 1fr;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding: clamp(0.5rem, 1vh, 0.75rem) 0;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: baseline;
+}
+.deadlines .item:last-child { border-bottom: none; }
+.deadlines .item .when {
+  font-family: var(--font-body);
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  font-weight: 500;
+  font-feature-settings: "tnum";
+}
+.deadlines .item .what {
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+.deadlines .item .what em { font-style: italic; color: var(--text-muted); }
+
+.questions { display: flex; flex-direction: column; gap: clamp(0.75rem, 1.5vh, 1.25rem); }
+.questions .q {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(0.75rem, 1.5vw, 1.15rem);
+  align-items: baseline;
+}
+.questions .q .n {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.5rem, 2.2vw, 1.8rem);
+  color: var(--accent);
+  line-height: 1;
+}
+.questions .q .text {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+/* ============================================================================
+   NAV DOTS + PROGRESS BAR
+   ============================================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 1px;
+  background: var(--accent);
+  z-index: 9999;
+  transition: width 0.25s ease-out;
+  width: 0;
+}
+
+.nav-dots {
+  position: fixed;
+  right: clamp(0.75rem, 1.5vw, 1.25rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.7vw, 0.55rem);
+  z-index: 9998;
+}
+.nav-dots button {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--text-faint);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.nav-dots button:hover { border-color: var(--accent); }
+.nav-dots button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ============================================================================
+   INLINE EDITING (opt-in)
+   ============================================================================ */
+.edit-hotzone {
+  position: fixed; top: 0; left: 0;
+  width: 70px; height: 70px;
+  z-index: 10000;
+  cursor: pointer;
+}
+.edit-toggle {
+  position: fixed;
+  top: clamp(0.5rem, 1vw, 0.85rem);
+  left: clamp(0.5rem, 1vw, 0.85rem);
+  width: clamp(30px, 2.6vw, 34px);
+  height: clamp(30px, 2.6vw, 34px);
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  z-index: 10001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+.edit-toggle.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.edit-banner {
+  position: fixed;
+  top: clamp(0.5rem, 1vw, 0.85rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-140%);
+  padding: 0.45rem 1rem;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: var(--small-size);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  z-index: 10002;
+  transition: transform 0.4s var(--ease);
+}
+.edit-banner.active { transform: translateX(-50%) translateY(0); }
+.edit-banner kbd {
+  background: rgba(0,0,0,0.15);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  margin: 0 0.15em;
+  font-family: inherit;
+}
+
+body.edit-active [contenteditable="true"] {
+  outline: 1px dashed rgba(60, 204, 121, 0.4);
+  outline-offset: 3px;
+  border-radius: 2px;
+  cursor: text;
+}
+body.edit-active [contenteditable="true"]:focus {
+  outline: 1px solid var(--accent);
+}
+</style>
+</head>
+<body class="">
+
+<!-- Chrome: progress, nav dots, edit affordance -->
+<div class="progress-bar" id="progressBar" style="width: 100%;"></div>
+<nav class="nav-dots" id="navDots" aria-label="Slide navigation"><button aria-label="Go to slide 1" class=""></button><button aria-label="Go to slide 2" class=""></button><button aria-label="Go to slide 3" class=""></button><button aria-label="Go to slide 4" class=""></button><button aria-label="Go to slide 5" class=""></button><button aria-label="Go to slide 6" class="active"></button></nav>
+<div class="edit-hotzone" id="editHotzone" title="Edit mode"></div>
+<button class="edit-toggle" id="editToggle" title="Edit mode (E)" aria-label="Toggle edit mode">✎</button>
+<div class="edit-banner" id="editBanner">
+  Edit mode · click any text · <kbd>Ctrl+S</kbd> saves · <kbd>E</kbd> exits
+</div>
+
+<!-- ============================================================================
+     SLIDE 1 — TITLE
+     ============================================================================ -->
+<section class="slide title-slide visible">
+  <header class="chrome-top">
+    <div class="index"><span class="current">01</span> / 06</div>
+  </header>
+
+  <div class="body">
+    <div class="kicker reveal" data-edit-id="el-0">PO Kickoff</div>
+    <h1 class="reveal" data-edit-id="el-1">Product AI Hackathon<span class="cursor" aria-hidden="true"></span></h1>
+    <div class="meta reveal">
+      <div class="item"><span class="k" data-edit-id="el-2">Today</span><span class="v" data-edit-id="el-3">24 April 2026</span></div>
+      <div class="item"><span class="k" data-edit-id="el-4">Hackathon day</span><span class="v" data-edit-id="el-5">4 May 2026</span></div>
+      <div class="item"><span class="k" data-edit-id="el-6">Audience</span><span class="v" data-edit-id="el-7">Product Owners</span></div>
+    </div>
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<!-- ============================================================================
+     SLIDE 2 — WHY WE'RE RUNNING THIS
+     ============================================================================ -->
+<section class="slide">
+  <header class="chrome-top">
+    <div class="index"><span class="current">02</span> / 06</div>
+  </header>
+
+  <div class="body">
+    <div class="section-intro reveal">
+      <h2 data-edit-id="el-9">A headspace gap, not a training gap.</h2>
+    </div>
+
+    <div class="tri-column stagger">
+      <div class="col reveal">
+        <h3 data-edit-id="el-10">The problem</h3>
+        <ul class="bullets">
+          <li data-edit-id="el-11">PMs aren't using Claude day-to-day.</li>
+          <li data-edit-id="el-12">They need headspace, not training.</li>
+          <li data-edit-id="el-13">Grab, Singtel, HSBC all say the same: protected time is what works.</li>
+        </ul>
+      </div>
+      <div class="col reveal">
+        <h3 data-edit-id="el-14">The solution</h3>
+        <ul class="bullets">
+          <li data-edit-id="el-15">One day with no BAU, no sprint work.</li>
+          <li data-edit-id="el-16">Every PM ships something with Claude on a real squad problem.</li>
+          <li data-edit-id="el-17">Get the creative juices flowing, experiment.</li>
+        </ul>
+      </div>
+      <div class="col reveal">
+        <h3 data-edit-id="el-18">Why you</h3>
+        <ul class="bullets">
+          <li data-edit-id="el-19">Only works if POs lead it for their squad.</li>
+          <li data-edit-id="el-20">You know the workflows and leverage points.</li>
+          <li data-edit-id="el-21">We need POs to help bring energy, enablement and follow through!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<!-- ============================================================================
+     SLIDE 3 — HOW THE DAY RUNS
+     ============================================================================ -->
+<section class="slide">
+  <header class="chrome-top">
+    <div class="index"><span class="current">03</span> / 06</div>
+  </header>
+
+  <div class="body">
+    <div class="section-intro reveal">
+      <h2 data-edit-id="el-23">What to build, how to build</h2>
+    </div>
+
+    <div class="tri-column stagger">
+      <div class="col reveal">
+        <h3 data-edit-id="el-24">The build</h3>
+        <ul class="bullets">
+          <li data-edit-id="el-25">Building solo is recommended.</li>
+          <li data-edit-id="el-26">PMs should come up with their own problems to solve. But POs can recommend.</li>
+          <li data-edit-id="el-27">What to ship? An n8n agent, a skill library, a dashboard, a new tool — Anything that is useful</li>
+          <li data-edit-id="el-28">Use Claude, Claude Code, n8n. Experiment.</li>
+        </ul>
+      </div>
+      <div class="col reveal">
+        <h3 data-edit-id="el-29">The rhythm</h3>
+        <ul class="bullets">
+          <li data-edit-id="el-30">Morning kickoff to set the scene</li>
+          <li data-edit-id="el-31">All PM declare publicly what they are building</li>
+          <li data-edit-id="el-32">Midday squad demos (Show-and-tell)</li>
+          <li data-edit-id="el-33">Final squad demos at end of day</li>
+        </ul>
+      </div>
+      <div class="col reveal">
+        <h3 data-edit-id="el-34">The demo</h3>
+        <ul class="bullets">
+          <li data-edit-id="el-35">End of day: demo to your squad.</li>
+          <li data-edit-id="el-36">POs summarise demos, celebrate in the Slack channel.</li>
+          <li data-edit-id="el-37">Selected projects demo live later that week (Maybe?)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<!-- ============================================================================
+     SLIDE 4 — DAY-OF SCHEDULE
+     ============================================================================ -->
+<section class="slide">
+  <header class="chrome-top">
+    <div class="index"><span class="current">04</span> / 06</div>
+  </header>
+
+  <div class="body">
+    <div class="section-intro reveal">
+      <h2 data-edit-id="el-39">Schedule</h2>
+    </div>
+
+    <div class="schedule reveal schedule-stagger">
+      <div class="time">09:45 — 10:00</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-40">Kickoff</div>
+        <div class="d" data-edit-id="el-41">Gio opens the day with the format and what shipped looks like.</div>
+      </div>
+
+      <div class="time">10:00 — 11:00</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-42">Start building</div>
+        <div class="d" data-edit-id="el-43">Pick your squad problem, commit in Slack, begin.</div>
+      </div>
+
+      <div class="time">11:00 — 11:15</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-44">Checkpoint 1</div>
+        <div class="d" data-edit-id="el-45">Everyone posts a one-liner in Slack on what they're building.</div>
+      </div>
+
+      <div class="time">11:15 — 13:30</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-46">Build + lunch</div>
+        <div class="d" data-edit-id="el-47">Keep going. Grab lunch whenever it suits you.</div>
+      </div>
+
+      <div class="time">13:30 — 14:00</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-48">Show-and-tell</div>
+        <div class="d" data-edit-id="el-49">POs run a live check-in with their squad. Unblock, guide, nudge.</div>
+      </div>
+
+      <div class="time">14:00 — 17:00</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-50">Final push</div>
+        <div class="d" data-edit-id="el-51">Polish the artifact and prep a tight three-minute demo.</div>
+      </div>
+
+      <div class="time">17:00 — 17:45</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-52">Squad demos</div>
+        <div class="d" data-edit-id="el-53">Every PM demos for three minutes to their squad.</div>
+      </div>
+
+      <div class="time">17:45</div>
+      <div class="entry">
+        <div class="t" data-edit-id="el-54">Wrap</div>
+        <div class="d" data-edit-id="el-55">POs summarise in Slack. Demo videos and PM shares encouraged.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<!-- ============================================================================
+     SLIDE 5 — WHAT YOU OWN
+     ============================================================================ -->
+<section class="slide">
+  <header class="chrome-top">
+    <div class="index"><span class="current">05</span> / 06</div>
+  </header>
+
+  <div class="body">
+    <div class="section-intro reveal">
+      <h2 data-edit-id="el-58">What you need to do as a Product Owner</h2>
+    </div>
+
+    <div class="phases stagger">
+      <div class="phase reveal">
+        <div class="when" data-edit-id="el-60">Before 4 May</div>
+        <h3 data-edit-id="el-61">Set your PMs up for success.</h3>
+        <ul>
+          <li data-edit-id="el-62">Announce to your PMs this week. Get them thinking about real squad problems AI could solve.</li>
+          <li data-edit-id="el-63">Draft 1–2 problem statements yourself. Send them to Zen so he can stress-test fit, ambition, and scope.</li>
+          <li data-edit-id="el-64">Tell your Tribe Lead and Eng Lead: 4 May is blocked. PMs are 100% focused unless a P0 hits.</li>
+          <li data-edit-id="el-65">Protect the calendars. No BAU, no sprint ceremonies, no ad-hoc asks.</li>
+        </ul>
+      </div>
+
+      <div class="phase reveal">
+        <div class="when" data-edit-id="el-66">On the day</div>
+        <h3 data-edit-id="el-67">Lead, anchor, celebrate.</h3>
+        <ul>
+          <li data-edit-id="el-68">Every PM has a mission. Make sure no one is drifting by mid-morning.</li>
+          <li data-edit-id="el-69">Host the show-and-tell. Run the live check-ins. Unblock, guide, nudge.</li>
+          <li data-edit-id="el-70">Keep the energy up from kickoff to wrap. You set the temperature.</li>
+          <li data-edit-id="el-71">Close out loud. Encourage every PM to record a demo video and share in Slack so the whole org can watch on their own time.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<!-- ============================================================================
+     SLIDE 6 — NEXT STEPS
+     ============================================================================ -->
+<section class="slide">
+  <header class="chrome-top">
+    <div class="index"><span class="current">06</span> / 06</div>
+  </header>
+
+  <div class="body">
+    <div class="section-intro reveal">
+      <h2 data-edit-id="el-99">Next steps</h2>
+    </div>
+
+    <div class="split-2 stagger">
+      <div class="col reveal">
+        <div class="col-label" data-edit-id="el-100">Product Owners — by Tue 28 Apr</div>
+        <ul class="bullets">
+          <li data-edit-id="el-101"><span class="opener">Announce Hackathon.</span>Put it on your squad's radar right now or first thing Monday.</li>
+          <li data-edit-id="el-102"><span class="opener">Prime your PMs.</span>Get them thinking about real squad problems AI could tackle. Validate fit with you or Zen.</li>
+          <li data-edit-id="el-103"><span class="opener">Have a backup.</span>Draft 1–2 problem statements yourself and send to Zen, so PMs aren't starting blank.</li>
+          <li data-edit-id="el-104"><span class="opener">Protect the day.</span>Block 4 May on calendars. No BAU, no sprint ceremonies.</li>
+        </ul>
+      </div>
+
+      <div class="col reveal">
+        <div class="col-label" data-edit-id="el-105">Timeline</div>
+        <div class="deadlines">
+          <div class="item">
+            <div class="when" data-edit-id="el-106">Mon 27 Apr</div>
+            <div class="what" data-edit-id="el-107">Zen sends invites for <em>#product-ai-hackathon-04may</em>.</div>
+          </div>
+          <div class="item">
+            <div class="when" data-edit-id="el-108">Tue 28 Apr</div>
+            <div class="what" data-edit-id="el-109">POs: everything above, done.</div>
+          </div>
+          <div class="item">
+            <div class="when" data-edit-id="el-110">Mon 4 May</div>
+            <div class="what" data-edit-id="el-111"><em>Hackathon day.</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<script>
+/* ============================================================================
+   SLIDE PRESENTATION CONTROLLER
+   ============================================================================ */
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.currentSlide = 0;
+    this.navDotsContainer = document.getElementById('navDots');
+    this.progressBar = document.getElementById('progressBar');
+
+    this.setupIntersectionObserver();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupNavDots();
+    this.updateProgressBar();
+  }
+
+  setupIntersectionObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0.5) {
+          entry.target.classList.add('visible');
+          this.currentSlide = Array.from(this.slides).indexOf(entry.target);
+          this.updateNavDots();
+          this.updateProgressBar();
+        } else if (entry.intersectionRatio < 0.2) {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: [0.2, 0.5] });
+    this.slides.forEach(slide => observer.observe(slide));
+  }
+
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.getAttribute('contenteditable') === 'true') return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        e.preventDefault();
+        this.goToSlide(this.currentSlide + 1);
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        this.goToSlide(this.currentSlide - 1);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        this.goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        this.goToSlide(this.slides.length - 1);
+      }
+    });
+  }
+
+  setupTouchNav() {
+    let touchStartY = 0;
+    document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const delta = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) < 50) return;
+      this.goToSlide(this.currentSlide + (delta > 0 ? 1 : -1));
+    }, { passive: true });
+  }
+
+  setupNavDots() {
+    this.navDotsContainer.innerHTML = '';
+    this.slides.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      if (i === 0) btn.classList.add('active');
+      btn.addEventListener('click', () => this.goToSlide(i));
+      this.navDotsContainer.appendChild(btn);
+    });
+  }
+
+  updateNavDots() {
+    this.navDotsContainer.querySelectorAll('button').forEach((btn, i) => {
+      btn.classList.toggle('active', i === this.currentSlide);
+    });
+  }
+
+  updateProgressBar() {
+    const pct = ((this.currentSlide + 1) / this.slides.length) * 100;
+    this.progressBar.style.width = `${pct}%`;
+  }
+
+  goToSlide(index) {
+    if (index < 0 || index >= this.slides.length) return;
+    this.slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/* ============================================================================
+   INLINE EDITOR
+   ============================================================================ */
+class InlineEditor {
+  constructor() {
+    this.isActive = false;
+    this.storageKey = 'ai-hackathon-deck-v13';
+    this.toggle = document.getElementById('editToggle');
+    this.banner = document.getElementById('editBanner');
+    this.hotzone = document.getElementById('editHotzone');
+    this.editableSelectors = 'h1, h2, h3, p, .kicker, .label, .cat, .when, .col-label, .t, .d, .what, .text, .n, li, .phase-warning, .card-footnote, .schedule-note, .meta .v, .meta .k';
+
+    this.restoreFromStorage();
+    this.bindUI();
+  }
+
+  bindUI() {
+    this.toggle.addEventListener('click', () => this.toggleEditMode());
+
+    let hideTimeout = null;
+    const show = () => { clearTimeout(hideTimeout); this.toggle.classList.add('show'); };
+    const hide = () => { hideTimeout = setTimeout(() => { if (!this.isActive) this.toggle.classList.remove('show'); }, 400); };
+    this.hotzone.addEventListener('mouseenter', show);
+    this.hotzone.addEventListener('mouseleave', hide);
+    this.toggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+    this.toggle.addEventListener('mouseleave', hide);
+    this.hotzone.addEventListener('click', () => this.toggleEditMode());
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'e' || e.key === 'E') && e.target.getAttribute('contenteditable') !== 'true' && !e.metaKey && !e.ctrlKey) {
+        this.toggleEditMode();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        if (this.isActive) { e.preventDefault(); this.exportFile(); }
+      }
+    });
+
+    document.addEventListener('blur', (e) => {
+      if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') this.saveToStorage();
+    }, true);
+  }
+
+  toggleEditMode() {
+    this.isActive = !this.isActive;
+    document.body.classList.toggle('edit-active', this.isActive);
+    this.toggle.classList.toggle('active', this.isActive);
+    this.banner.classList.toggle('active', this.isActive);
+    document.querySelectorAll(this.editableSelectors).forEach(el => {
+      if (this.isActive) el.setAttribute('contenteditable', 'true');
+      else el.removeAttribute('contenteditable');
+    });
+    if (!this.isActive) this.toggle.classList.remove('show');
+  }
+
+  saveToStorage() {
+    const edits = {};
+    document.querySelectorAll(this.editableSelectors).forEach((el, i) => {
+      const id = el.dataset.editId || `el-${i}`;
+      el.dataset.editId = id;
+      edits[id] = el.innerHTML;
+    });
+    try { localStorage.setItem(this.storageKey, JSON.stringify(edits)); } catch (e) {}
+  }
+
+  restoreFromStorage() {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (!raw) return;
+      const edits = JSON.parse(raw);
+      document.querySelectorAll(this.editableSelectors).forEach((el, i) => {
+        const id = el.dataset.editId || `el-${i}`;
+        el.dataset.editId = id;
+        if (edits[id] !== undefined) el.innerHTML = edits[id];
+      });
+    } catch (e) {}
+  }
+
+  exportFile() {
+    const editableEls = Array.from(document.querySelectorAll('[contenteditable]'));
+    editableEls.forEach(el => el.removeAttribute('contenteditable'));
+    document.body.classList.remove('edit-active');
+    this.toggle.classList.remove('active', 'show');
+    this.banner.classList.remove('active', 'show');
+
+    const navDotsEl = document.getElementById('navDots');
+    const dotsBackup = navDotsEl.innerHTML;
+    navDotsEl.innerHTML = '';
+    const pbEl = document.getElementById('progressBar');
+    const pbWidth = pbEl.style.width;
+    pbEl.style.width = '0';
+
+    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+    document.body.classList.add('edit-active');
+    editableEls.forEach(el => el.setAttribute('contenteditable', 'true'));
+    this.toggle.classList.add('active');
+    this.banner.classList.add('active');
+    navDotsEl.innerHTML = dotsBackup;
+    pbEl.style.width = pbWidth;
+
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Product_AI_Hackathon_PO_Kickoff.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+}
+
+const editor = new InlineEditor();
+const presentation = new SlidePresentation();
+document.querySelector('.slide').classList.add('visible');
+</script>
+
+
+</body></html>
