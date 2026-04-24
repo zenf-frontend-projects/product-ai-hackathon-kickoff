@@ -447,6 +447,36 @@ p { color: var(--text-secondary); max-width: 62ch; }
 }
 .section-intro p { margin-top: clamp(0.75rem, 1.5vh, 1.2rem); }
 
+/* ============================================================================
+   GAP-CHART SLIDE — hero chart image beneath a section intro
+   ============================================================================ */
+.section-intro.gap-intro {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.section-intro.gap-intro h2 {
+  max-width: 44ch;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+
+.gap-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.gap-chart img {
+  width: 100%;
+  max-width: min(1100px, 92%);
+  height: auto;
+  max-height: 58vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
+}
+
 .tri-column {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -868,7 +898,7 @@ body.edit-active [contenteditable="true"]:focus {
      ============================================================================ -->
 <section class="slide title-slide visible">
   <header class="chrome-top">
-    <div class="index"><span class="current">01</span> / 06</div>
+    <div class="index"><span class="current">01</span> / 07</div>
   </header>
 
   <div class="body">
@@ -885,11 +915,32 @@ body.edit-active [contenteditable="true"]:focus {
 </section>
 
 <!-- ============================================================================
-     SLIDE 2 — WHY WE'RE RUNNING THIS
+     SLIDE 2 — THE GAP
      ============================================================================ -->
 <section class="slide">
   <header class="chrome-top">
-    <div class="index"><span class="current">02</span> / 06</div>
+    <div class="index"><span class="current">02</span> / 07</div>
+  </header>
+
+  <div class="body">
+    <div class="section-intro gap-intro reveal">
+      <h2 data-edit-id="el-200">There is a growing gap between what AI can do and what business can build.</h2>
+    </div>
+
+    <div class="gap-chart reveal">
+      <img src="images/capability-gap.png" alt="Chart showing model capabilities growing exponentially while realized value lags far behind, creating a widening band of unrealized value." />
+    </div>
+  </div>
+
+  <footer class="chrome-bottom"></footer>
+</section>
+
+<!-- ============================================================================
+     SLIDE 3 — WHY WE'RE RUNNING THIS
+     ============================================================================ -->
+<section class="slide">
+  <header class="chrome-top">
+    <div class="index"><span class="current">03</span> / 07</div>
   </header>
 
   <div class="body">
@@ -933,7 +984,7 @@ body.edit-active [contenteditable="true"]:focus {
      ============================================================================ -->
 <section class="slide">
   <header class="chrome-top">
-    <div class="index"><span class="current">03</span> / 06</div>
+    <div class="index"><span class="current">04</span> / 07</div>
   </header>
 
   <div class="body">
@@ -979,7 +1030,7 @@ body.edit-active [contenteditable="true"]:focus {
      ============================================================================ -->
 <section class="slide">
   <header class="chrome-top">
-    <div class="index"><span class="current">04</span> / 06</div>
+    <div class="index"><span class="current">05</span> / 07</div>
   </header>
 
   <div class="body">
@@ -1047,7 +1098,7 @@ body.edit-active [contenteditable="true"]:focus {
      ============================================================================ -->
 <section class="slide">
   <header class="chrome-top">
-    <div class="index"><span class="current">05</span> / 06</div>
+    <div class="index"><span class="current">06</span> / 07</div>
   </header>
 
   <div class="body">
@@ -1089,7 +1140,7 @@ body.edit-active [contenteditable="true"]:focus {
      ============================================================================ -->
 <section class="slide">
   <header class="chrome-top">
-    <div class="index"><span class="current">06</span> / 06</div>
+    <div class="index"><span class="current">07</span> / 07</div>
   </header>
 
   <div class="body">
@@ -1228,7 +1279,7 @@ class SlidePresentation {
 class InlineEditor {
   constructor() {
     this.isActive = false;
-    this.storageKey = 'ai-hackathon-deck-v17';
+    this.storageKey = 'ai-hackathon-deck-v19';
     this.toggle = document.getElementById('editToggle');
     this.banner = document.getElementById('editBanner');
     this.hotzone = document.getElementById('editHotzone');
